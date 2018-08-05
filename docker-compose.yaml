@@ -1,0 +1,41 @@
+version: '3'
+services:
+  redis:
+    build:
+      context: redis/
+      dockerfile: Dockerfile
+    image: mocchi/rrrnginx-redis
+  resolver:
+    build:
+      context: resolver/
+      dockerfile: Dockerfile
+    image: mocchi/rrrnginx-resolver
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./resolver/extra/:/usr/local/nginx/extra/
+    command: sh -c 'python /root/wait_for_tcp.py redis 6379 60 && /usr/local/nginx/sbin/nginx'
+  front:
+    build:
+      context: front/
+      dockerfile: Dockerfile
+    image: mocchi/rrrnginx-front
+    depends_on:
+      - resolver
+    ports:
+      - 8081:80
+    command: sh -c 'python /root/wait_for_tcp.py resolver 80 60 && /usr/sbin/nginx'
+  app:
+    build:
+      context: sample/
+      dockerfile: Dockerfile
+    image: mocchi/sampleapp
+    environment:
+      APP_ENV: production
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./sample/app/:/root/app/
