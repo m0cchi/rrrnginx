@@ -27,6 +27,11 @@ services:
       - resolver
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - ./front/.cert:/etc/nginx/cert/
+    environment:
+      USE_HTTPS: 'true'
     command: sh -c 'python /root/wait_for_tcp.py resolver 80 60 && sh /root/bin/run.sh'
   app:
     build:
