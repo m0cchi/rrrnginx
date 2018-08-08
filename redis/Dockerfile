@@ -1,3 +1,3 @@
 FROM redis:4
 MAINTAINER m0cchi
-CMD ['redis-server']
+CMD /usr/local/bin/redis-server
