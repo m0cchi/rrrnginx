@@ -15,6 +15,7 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      ERROR_PAGE: 'sorry:4567'
     volumes:
       - ./resolver/extra/:/usr/local/nginx/extra/
     command: sh -c 'python /root/wait_for_tcp.py redis 6379 60 && /usr/local/nginx/sbin/nginx'
@@ -39,3 +40,11 @@ services:
       REDIS_PORT: 6379
     volumes:
       - ./sample/app/:/root/app/
+  sorry:
+    build:
+      context: sorry/
+      dockerfile: Dockerfile
+    image: mocchi/sorry
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379

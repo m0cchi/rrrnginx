@@ -1,3 +1,5 @@
 r = Nginx::Request.new
 c = Userdata.new('redis').conn
-c.get(r.hostname) # host:port
+address = c.get(r.hostname) # host:port
+
+address || ENV['ERROR_PAGE']
