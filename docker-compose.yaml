@@ -29,17 +29,6 @@ services:
     ports:
       - 80:80
     command: sh -c 'python /root/wait_for_tcp.py resolver 80 60 && sh /root/bin/run.sh'
-  app:
-    build:
-      context: sample/
-      dockerfile: Dockerfile
-    image: mocchi/sampleapp
-    environment:
-      APP_ENV: production
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-    volumes:
-      - ./sample/app/:/root/app/
   sorry:
     build:
       context: sorry/
