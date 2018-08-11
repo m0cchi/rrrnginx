@@ -23,11 +23,13 @@ Dir.glob("#{Pathname(parts_dir).expand_path.to_path}/*{yaml,yml}") do |docker_co
 end
 
 target = -1
-services['front']['volumes'].each_with_index do |v,i|
-  direction = v.split(':').last
-  if direction == '/etc/nginx/cert/'
-    target = i
-    break
+unless services['front']['volumes'].nil?
+  services['front']['volumes'].each_with_index do |v,i|
+    direction = v.split(':').last
+    if direction == '/etc/nginx/cert/'
+      target = i
+      break
+    end
   end
 end
 
