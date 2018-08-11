@@ -12,5 +12,9 @@ COMPOSE_FILE="$L/../._docker-compose.yaml"
 
 ruby "$L/merge.rb" "$COMPOSE_FILE" "$BASE_COMPOSE_FILE" "$L/../parts/"
 
+if [ -e "$L/../.env" ]; then
+    source "$L/../.env"
+fi
+
 export COMPOSE_FILE
 docker-compose $*
