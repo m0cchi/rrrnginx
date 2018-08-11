@@ -22,6 +22,21 @@ Dir.glob("#{Pathname(parts_dir).expand_path.to_path}/*{yaml,yml}") do |docker_co
   services.merge!(_services)
 end
 
+target = -1
+services['front']['volumes'].each_with_index do |v,i|
+  direction = v.split(':').last
+  if direction == '/etc/nginx/cert/'
+    target = i
+    break
+  end
+end
+
+if target > -1
+  from = ENV['LETSENCRYPT'] || './front/.cert'
+  services['front']['volumes'][target] = "#{from}:/etc/nginx/cert/"
+end
+
+
 open(Pathname(output).expand_path.to_path, 'w') do |f|
   YAML.dump(base_yaml, f)  
 end
