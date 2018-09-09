@@ -1,5 +1,13 @@
 version: '3'
 services:
+  syslog:
+    build:
+      context: syslog/
+      dockerfile: Dockerfile
+    image: mocchi/syslog
+    volumes:
+      - ./syslog/bin/:/root/bin/
+    command: sh /root/bin/run.sh
   redis:
     build:
       context: redis/
@@ -25,6 +33,7 @@ services:
       dockerfile: Dockerfile
     image: mocchi/rrrnginx-front
     depends_on:
+      - syslog
       - resolver
     ports:
       - 80:80

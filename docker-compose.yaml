@@ -1,5 +1,13 @@
 version: '3'
 services:
+  syslog:
+    build:
+      context: syslog/
+      dockerfile: Dockerfile
+    image: mocchi/syslog
+    volumes:
+      - ./syslog/bin/:/root/bin/
+    command: sh /root/bin/run.sh
   redis:
     build:
       context: redis/
@@ -26,6 +34,7 @@ services:
     image: mocchi/rrrnginx-front
     depends_on:
       - resolver
+      - syslog
     ports:
       - 80:80
     command: sh -c 'python /root/wait_for_tcp.py resolver 80 60 && sh /root/bin/run.sh'
