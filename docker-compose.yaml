@@ -4,7 +4,7 @@ services:
     build:
       context: syslog/
       dockerfile: Dockerfile
-    image: mocchi/syslog
+    image: mocchi/rrrnginx-syslog
     volumes:
       - ./syslog/bin/:/root/bin/
     command: sh /root/bin/run.sh
